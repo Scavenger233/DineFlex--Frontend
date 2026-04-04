@@ -11,7 +11,7 @@ const OAuthRedirect = () => {
     if (token) {
       localStorage.setItem("dineflexUser", JSON.stringify({ token }));
 
-      fetch(`${import.meta.env.VITE_API_BASE_URL}/api/customers/me`, {
+      fetch(`${import.meta.env.VITE_API_BASE_URL}/customers/me`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

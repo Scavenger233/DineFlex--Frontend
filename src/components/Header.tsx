@@ -19,7 +19,7 @@ import { loginCustomer, registerCustomer } from "@/services/api";
 import { useNavigate } from "react-router-dom";
 
 const GOOGLE_LOGIN_URL =
-  "https://dineflex-backend.onrender.com/oauth2/authorization/google";
+  "http://localhost:8080/oauth2/authorization/google";
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
