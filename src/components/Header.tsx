@@ -17,9 +17,9 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { loginCustomer, registerCustomer } from "@/services/api";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/context/AuthContext";
 
-const GOOGLE_LOGIN_URL =
-  "http://localhost:8080/oauth2/authorization/google";
+const GOOGLE_LOGIN_URL = "http://localhost:8080/oauth2/authorization/google";
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -29,16 +29,7 @@ const Header = () => {
   const [activeTab, setActiveTab] = useState("login");
   const [authDialogOpen, setAuthDialogOpen] = useState(false);
   const navigate = useNavigate();
-  const [currentUser, setCurrentUser] = useState<{
-    customerName: string;
-  } | null>(null);
-
-  useEffect(() => {
-    const stored = localStorage.getItem("customer");
-    if (stored) {
-      setCurrentUser(JSON.parse(stored));
-    }
-  }, []);
+  const { currentUser, login, logout } = useAuth();
 
   // Handle scroll events to change header appearance
   useEffect(() => {
@@ -69,17 +60,14 @@ const Header = () => {
         description: `Welcome back, ${res.customerName}`,
       });
       // Optionally: save customer info or token
-      localStorage.setItem(
-        "customer",
-        JSON.stringify({
-          // Keep consistency between front and back end
+      login(
+        {
           customerName: res.customerName,
           customerEmail: res.customerEmail,
           customerPhone: res.phone,
-        })
+        },
+        res.token,
       );
-
-      setCurrentUser(res); // Update UI logic first
       setAuthDialogOpen(false); // Then close modal
 
       // Redirect to main page
@@ -136,8 +124,7 @@ const Header = () => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("customer");
-    setCurrentUser(null);
+    logout();
     toast({
       title: "Logged out",
       description: "You’ve been signed out.",
@@ -150,7 +137,7 @@ const Header = () => {
         "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
         isScrolled
           ? "bg-white shadow-md py-2"
-          : "bg-white/80 backdrop-blur-sm py-4"
+          : "bg-white/80 backdrop-blur-sm py-4",
       )}
     >
       <div className="container mx-auto px-4 flex justify-between items-center">
@@ -169,7 +156,7 @@ const Header = () => {
                 className={cn(
                   "font-medium text-dineflex-charcoal hover:text-dineflex-burgundy transition-colors relative after:absolute after:bottom-[-4px] after:left-0 after:right-0 after:h-0.5 after:bg-dineflex-burgundy after:scale-x-0 after:transition-transform after:duration-300 hover:after:scale-x-100",
                   location.pathname === "/" &&
-                    "text-dineflex-burgundy after:scale-x-100"
+                    "text-dineflex-burgundy after:scale-x-100",
                 )}
               >
                 Restaurants
@@ -181,7 +168,7 @@ const Header = () => {
                 className={cn(
                   "font-medium text-dineflex-charcoal hover:text-dineflex-burgundy transition-colors relative after:absolute after:bottom-[-4px] after:left-0 after:right-0 after:h-0.5 after:bg-dineflex-burgundy after:scale-x-0 after:transition-transform after:duration-300 hover:after:scale-x-100",
                   location.pathname === "/about" &&
-                    "text-dineflex-burgundy after:scale-x-100"
+                    "text-dineflex-burgundy after:scale-x-100",
                 )}
               >
                 About
@@ -516,7 +503,7 @@ const Header = () => {
                   to="/"
                   className={cn(
                     "block py-2 font-medium text-dineflex-charcoal hover:text-dineflex-burgundy transition-colors",
-                    location.pathname === "/" && "text-dineflex-burgundy"
+                    location.pathname === "/" && "text-dineflex-burgundy",
                   )}
                 >
                   Restaurants
@@ -527,7 +514,7 @@ const Header = () => {
                   to="/about"
                   className={cn(
                     "block py-2 font-medium text-dineflex-charcoal hover:text-dineflex-burgundy transition-colors",
-                    location.pathname === "/about" && "text-dineflex-burgundy"
+                    location.pathname === "/about" && "text-dineflex-burgundy",
                   )}
                 >
                   About

@@ -1,16 +1,16 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/context/AuthContext";
 
 const OAuthRedirect = () => {
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const token = params.get("token");
 
     if (token) {
-      localStorage.setItem("dineflexUser", JSON.stringify({ token }));
-
       fetch(`${import.meta.env.VITE_API_BASE_URL}/customers/me`, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -18,7 +18,15 @@ const OAuthRedirect = () => {
       })
         .then((res) => res.json())
         .then((user) => {
-          localStorage.setItem("customer", JSON.stringify(user));
+          console.log("OAuth user data:", user);
+          login(
+            {
+              customerName: user.customerName,
+              customerEmail: user.customerEmail,
+              customerPhone: user.phone,
+            },
+            token,
+          );
           navigate("/");
         })
         .catch(() => {
@@ -26,7 +34,7 @@ const OAuthRedirect = () => {
           navigate("/login");
         });
     } else {
-      navigate("/login");
+      navigate("/");
     }
   }, [navigate]);
 

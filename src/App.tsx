@@ -11,6 +11,7 @@ import NotFound from "./pages/NotFound";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import OAuthRedirect from "./pages/OAuthRedirect";
+import { AuthProvider } from "./context/AuthContext";
 
 const queryClient = new QueryClient();
 
@@ -20,23 +21,24 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <div className="flex flex-col min-h-screen">
-          <Header />
-          <div className="pt-24 flex-grow">
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/restaurant/:id" element={<RestaurantDetail />} />
-              <Route path="/booking/:id" element={<BookingConfirmation />} />
-              <Route path="/about" element={<About />} />
-              <Route path="*" element={<NotFound />} />
-              <Route path="/oauth2/redirect" element={<OAuthRedirect />} />
-            </Routes>
+        <AuthProvider>
+          <div className="flex flex-col min-h-screen">
+            <Header />
+            <div className="pt-24 flex-grow">
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="/restaurant/:id" element={<RestaurantDetail />} />
+                <Route path="/booking/:id" element={<BookingConfirmation />} />
+                <Route path="/about" element={<About />} />
+                <Route path="*" element={<NotFound />} />
+                <Route path="/oauth2/redirect" element={<OAuthRedirect />} />
+              </Routes>
+            </div>
+            <Footer />
           </div>
-          <Footer />
-        </div>
+        </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
 );
-
 export default App;
