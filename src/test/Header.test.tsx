@@ -3,6 +3,7 @@ import { MemoryRouter } from "react-router-dom";
 import { vi } from "vitest";
 import Header from "@/components/Header";
 import { AuthProvider } from "@/context/AuthContext";
+import userEvent from "@testing-library/user-event";
 
 // mock api
 vi.mock("@/services/api", () => ({
@@ -74,5 +75,11 @@ describe("Header", () => {
     });
 
     expect(screen.getByText("Sign In")).toBeInTheDocument();
+  });
+
+  it("should show login dialog when Sign In clicked", async () => {
+    renderHeader();
+    await userEvent.click(screen.getByText("Sign In"));
+    expect(screen.getByText("Account Access")).toBeInTheDocument();
   });
 });
