@@ -19,7 +19,7 @@ import { loginCustomer, registerCustomer } from "@/services/api";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 
-const GOOGLE_LOGIN_URL = "http://localhost:8080/oauth2/authorization/google";
+const GOOGLE_LOGIN_URL = `${import.meta.env.VITE_API_BASE_URL?.replace("/api", "")}/oauth2/authorization/google`;
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
