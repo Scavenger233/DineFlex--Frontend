@@ -31,7 +31,7 @@ const OAuthRedirect = () => {
         })
         .catch(() => {
           alert("OAuth login failed.");
-          navigate("/login");
+          navigate("/");
         });
     } else {
       navigate("/");
