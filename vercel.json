@@ -1,8 +1,8 @@
 {
   "rewrites": [
     {
-      "source": "/oauth2/callback/google",
-      "destination": "https://dineflex-backend.onrender.com/oauth2/callback/google"
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }
